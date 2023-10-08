@@ -1,10 +1,31 @@
-
-const express = require('express')
+const express = require("express")
+const mongoose = require("mongoose")
+const cors = require("cors")
 const app = express()
-const PORT = 4000
+require("dotenv").config()
+const {MONGO_URL, PORT} = process.env
+
+// mongodb connect
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB is  connected successfully"))
+  .catch((err) => console.error(err));
+
+
 
 app.listen(PORT, () => {
-    console.log("Serve is runnit on port", PORT)
+    console.log("Sever is running on port", PORT)
 })
 
 
+app.use(
+    cors({
+        origin : ["http://localhost:4000"],
+        methods : ["GET", "POST", "PUT", "DELETE"],
+        credentials : true,
+    })
+)
+
+app.use(express.json())
